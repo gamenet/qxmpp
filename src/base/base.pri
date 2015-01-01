@@ -36,17 +36,16 @@ INSTALL_HEADERS += \
     base/QXmppUtils.h \
     base/QXmppVCardIq.h \
     base/QXmppVersionIq.h \
-    base/QXmppGaming.h
+    base/QXmppGaming.h \
+    base/QXmppMessageCarbonsIq.h \
+    base/QXmppReachAddress.h \
+    base/QXmppSimpleArchivePreferenceIq.h \
+    base/QXmppStreamManagement.h
 
 HEADERS += \
     base/QXmppCodec_p.h \
     base/QXmppSasl_p.h \
-    base/QXmppStreamInitiationIq_p.h \
-    base/QXmppSimpleArchivePreferenceIq.h \
-    base/QXmppMessageCarbonsIq.h \
-    base/QXmppReachAddress.h \
-    base/QXmppStreamManagement.h \
-    base/QXmppGaming.h
+    base/QXmppStreamInitiationIq_p.h
 
 # Source files
 SOURCES += \
