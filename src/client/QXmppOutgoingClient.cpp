@@ -257,6 +257,7 @@ void QXmppOutgoingClient::disconnectFromHost(const bool sendCloseStream)
     if(sendCloseStream)
     {
         d->streamManagement->disable();
+        emit streamManagementEnabled(false);
     }
 
     if(d->streamManagement->isResumeEnabled())
