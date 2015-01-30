@@ -617,14 +617,24 @@ void QXmppMessage::parse(const QDomElement &element)
     }
 
     // XEP-0280: message carbons
-    QDomElement carbonElement = element.firstChildElement("sent");
+    QDomElement carbonElement = element.firstChildElement("received");
     if (!carbonElement.isNull() && carbonElement.namespaceURI() == ns_message_carbons)
     {
-        QDomElement forwardedElement = carbonElement.firstChildElement("forwarded");
-        if (!forwardedElement.isNull() && forwardedElement.namespaceURI() == ns_stanza_forwarding)
-        {
-            setMessagecarbon(parseForward(forwardedElement));
-        }
+      QDomElement forwardedElement = carbonElement.firstChildElement("forwarded");
+      if (!forwardedElement.isNull() && forwardedElement.namespaceURI() == ns_stanza_forwarding)
+      {
+        setMessagecarbon(parseForward(forwardedElement));
+      }
+    }
+
+    carbonElement = element.firstChildElement("sent");
+    if (!carbonElement.isNull() && carbonElement.namespaceURI() == ns_message_carbons)
+    {
+      QDomElement forwardedElement = carbonElement.firstChildElement("forwarded");
+      if (!forwardedElement.isNull() && forwardedElement.namespaceURI() == ns_stanza_forwarding)
+      {
+        setMessagecarbon(parseForward(forwardedElement));
+      }
     }
 
     // XEP-0297: Forwarding
