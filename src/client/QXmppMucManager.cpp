@@ -299,6 +299,7 @@ bool QXmppMucRoom::kick(const QString &jid, const QString &reason)
     QXmppMucItem item;
     item.setNick(QXmppUtils::jidToResource(jid));
     item.setRole(QXmppMucItem::NoRole);
+    item.setJid(jid);
     item.setReason(reason);
 
     QXmppMucAdminIq iq;
@@ -368,6 +369,17 @@ bool QXmppMucRoom::sendMessage(const QString &text)
     msg.setType(QXmppMessage::GroupChat);
     msg.setBody(text);
     return d->client->sendPacket(msg);
+}
+
+bool QXmppMucRoom::destroy(const QString &reason)
+{
+    QXmppMucOwnerIq iqPacket;
+    iqPacket.setType(QXmppIq::Set);
+    iqPacket.setTo(d->jid);
+    iqPacket.setDestroy(true);
+    iqPacket.setDestroyReason(reason);
+
+    return d->client->sendPacket(iqPacket);
 }
 
 /// Sets your own nickname.
@@ -521,6 +533,7 @@ bool QXmppMucRoom::requestPermissions()
             return false;
         d->permissionsQueue += iq.id();
     }
+
     return true;
 }
 
@@ -655,10 +668,15 @@ void QXmppMucRoom::_q_presenceReceived(const QXmppPresence &presence)
                 d->allowedActions = newActions;
                 emit allowedActionsChanged(d->allowedActions);
             }
+
+            if (presence.mucStatusCodes().contains(201)) {
+                emit created();
+            }
         }
 
         if (added) {
             emit participantAdded(jid);
+            emit participantPermissions(presence.mucItem());
             emit participantsChanged();
             if (jid == d->ownJid()) {
                 // request room information

@@ -318,8 +318,8 @@ void helperToXmlAddAttribute(QXmlStreamWriter* stream, const QString& name,
 void helperToXmlAddTextElement(QXmlStreamWriter* stream, const QString& name,
                            const QString& value)
 {
-    if(!value.isEmpty())
-        stream->writeTextElement( name, value);
+    if (!value.isEmpty())
+        stream->writeTextElement(name, value);
     else
         stream->writeEmptyElement(name);
 }

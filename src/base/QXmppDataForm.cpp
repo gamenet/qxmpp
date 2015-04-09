@@ -586,10 +586,10 @@ void QXmppDataForm::toXml(QXmlStreamWriter *writer) const
             if (type == ptr->type)
             {
                 typeStr = ptr->str;
+                writer->writeAttribute("type", typeStr);
                 break;
             }
         }
-        writer->writeAttribute("type", typeStr);
 
         /* field attributes */
         helperToXmlAddAttribute(writer, "label", field.label());
@@ -607,7 +607,7 @@ void QXmppDataForm::toXml(QXmlStreamWriter *writer) const
             foreach (const QString &value, field.value().toStringList())
                 helperToXmlAddTextElement(writer, "value", value);
         }
-        else if (!field.value().isNull())
+        else
         {
             helperToXmlAddTextElement(writer, "value", field.value().toString());
         }
