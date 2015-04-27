@@ -143,6 +143,8 @@ public:
     QString subject() const;
     void setSubject(const QString &subject);
 
+    void setHistoryConfig(const QString &type, const QString& value);
+
 signals:
     void created() const;
 
@@ -180,7 +182,7 @@ signals:
     /// This signal is emitted when a participant joins the room.
     void participantAdded(const QString &jid);
 
-    void participantPermissions(const QXmppMucItem& permissions);
+    void participantPermissions(const QString &jid, const QXmppMucItem& permissions);
 
     /// This signal is emitted when a participant changes.
     void participantChanged(const QString &jid);

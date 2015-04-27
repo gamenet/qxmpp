@@ -76,6 +76,9 @@ public:
     QString mucPassword;
     QList<int> mucStatusCodes;
     bool mucSupported;
+
+    QString mucHistoryConfigType;
+    QString mucHistoryConfigValue;
 };
 
 /// Constructs a QXmppPresence.
@@ -303,6 +306,13 @@ void QXmppPresence::toXml(QXmlStreamWriter *xmlWriter) const
         xmlWriter->writeAttribute("xmlns", ns_muc);
         if (!d->mucPassword.isEmpty())
             xmlWriter->writeTextElement("password", d->mucPassword);
+
+        if (!d->mucHistoryConfigType.isEmpty()) {
+            xmlWriter->writeStartElement("history");
+            xmlWriter->writeAttribute(d->mucHistoryConfigType, d->mucHistoryConfigValue);
+            xmlWriter->writeEndElement();
+        }
+
         xmlWriter->writeEndElement();
     }
 
@@ -502,3 +512,10 @@ void QXmppPresence::setMucSupported(bool supported)
 {
     d->mucSupported = supported;
 }
+
+void QXmppPresence::setMucHistory(const QString &type, const QString &value)
+{
+    d->mucHistoryConfigType = type;
+    d->mucHistoryConfigValue = value;
+}
+

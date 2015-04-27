@@ -103,6 +103,7 @@ public:
     QString mucInvitationJid;
     QString mucInvitationPassword;
     QString mucInvitationReason;
+    bool mucInvitationDirect;
 
     // XEP-0334: Message Processing Hints
     QList<QXmppMessage::Hint> hints;
@@ -142,6 +143,8 @@ QXmppMessage::QXmppMessage(const QString& from, const QString& to, const
     d->marker = NoMarker;
 
     d->replace = false;
+
+    d->mucInvitationDirect = true;
 }
 
 /// Constructs a copy of \a other.
@@ -283,6 +286,11 @@ QString QXmppMessage::mucInvitationReason() const
 void QXmppMessage::setMucInvitationReason(const QString &reason)
 {
     d->mucInvitationReason = reason;
+}
+
+void QXmppMessage::setMucInvitationDirect(bool value)
+{
+    d->mucInvitationDirect = value;
 }
 
 /// Returns the message's type.
@@ -835,14 +843,28 @@ void QXmppMessage::toXml(QXmlStreamWriter *xmlWriter) const
 
     // XEP-0249: Direct MUC Invitations
     if (!d->mucInvitationJid.isEmpty()) {
-        xmlWriter->writeStartElement("x");
-        xmlWriter->writeAttribute("xmlns", ns_conference);
-        xmlWriter->writeAttribute("jid", d->mucInvitationJid);
-        if (!d->mucInvitationPassword.isEmpty())
-            xmlWriter->writeAttribute("password", d->mucInvitationPassword);
-        if (!d->mucInvitationReason.isEmpty())
-            xmlWriter->writeAttribute("reason", d->mucInvitationReason);
-        xmlWriter->writeEndElement();
+        if (d->mucInvitationDirect) {
+            xmlWriter->writeStartElement("x");
+            xmlWriter->writeAttribute("xmlns", ns_conference);
+            xmlWriter->writeAttribute("jid", d->mucInvitationJid);
+            if (!d->mucInvitationPassword.isEmpty())
+                xmlWriter->writeAttribute("password", d->mucInvitationPassword);
+            if (!d->mucInvitationReason.isEmpty())
+                xmlWriter->writeAttribute("reason", d->mucInvitationReason);
+            xmlWriter->writeEndElement();
+        } else {
+            xmlWriter->writeStartElement("x");
+            xmlWriter->writeAttribute("xmlns", ns_muc_user);
+
+            xmlWriter->writeStartElement("invite");
+            xmlWriter->writeAttribute("to", d->mucInvitationJid);
+
+            helperToXmlAddTextElement(xmlWriter, "reason", d->mucInvitationReason);
+
+            xmlWriter->writeEndElement();
+
+            xmlWriter->writeEndElement();
+        }
     }
 
     // XEP-0334: Message Processing Hints
