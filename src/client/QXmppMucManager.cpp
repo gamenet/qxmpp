@@ -53,6 +53,9 @@ public:
     QSet<QString> permissionsQueue;
     QString nickName;
     QString subject;
+
+    QString historyType;
+    QString historyValue;
 };
 
 /// Constructs a new QXmppMucManager.
@@ -117,12 +120,15 @@ bool QXmppMucManager::handleStanza(const QDomElement &element)
             iq.parse(element);
 
             QXmppMucRoom *room = d->rooms.value(iq.from());
-            if (room && iq.type() == QXmppIq::Result && room->d->permissionsQueue.remove(iq.id())) {
-                foreach (const QXmppMucItem &item, iq.items()) {
-                    const QString jid = item.jid();
-                    if (!room->d->permissions.contains(jid))
-                        room->d->permissions.insert(jid, item);
+            if (room && room->d->permissionsQueue.remove(iq.id())) {
+                if (iq.type() == QXmppIq::Result) {
+                    foreach (const QXmppMucItem &item, iq.items()) {
+                        const QString jid = item.jid();
+                        if (!room->d->permissions.contains(jid))
+                            room->d->permissions.insert(jid, item);
+                    }
                 }
+
                 if (room->d->permissionsQueue.isEmpty()) {
                     emit room->permissionsReceived(room->d->permissions.values());
                 }
@@ -285,6 +291,9 @@ bool QXmppMucRoom::join()
     packet.setType(QXmppPresence::Available);
     packet.setMucPassword(d->password);
     packet.setMucSupported(true);
+
+    packet.setMucHistory(d->historyType, d->historyValue);
+
     return d->client->sendPacket(packet);
 }
 
@@ -299,6 +308,7 @@ bool QXmppMucRoom::kick(const QString &jid, const QString &reason)
     QXmppMucItem item;
     item.setNick(QXmppUtils::jidToResource(jid));
     item.setRole(QXmppMucItem::NoRole);
+    item.setJid(jid);
     item.setReason(reason);
 
     QXmppMucAdminIq iq;
@@ -368,6 +378,17 @@ bool QXmppMucRoom::sendMessage(const QString &text)
     msg.setType(QXmppMessage::GroupChat);
     msg.setBody(text);
     return d->client->sendPacket(msg);
+}
+
+bool QXmppMucRoom::destroy(const QString &reason)
+{
+    QXmppMucOwnerIq iqPacket;
+    iqPacket.setType(QXmppIq::Set);
+    iqPacket.setTo(d->jid);
+    iqPacket.setDestroy(true);
+    iqPacket.setDestroyReason(reason);
+
+    return d->client->sendPacket(iqPacket);
 }
 
 /// Sets your own nickname.
@@ -466,6 +487,12 @@ void QXmppMucRoom::setSubject(const QString &subject)
     d->client->sendPacket(msg);
 }
 
+void QXmppMucRoom::setHistoryConfig(const QString &type, const QString &value)
+{
+    d->historyType = type;
+    d->historyValue = value;
+}
+
 /// Request the configuration form for the chat room.
 ///
 /// \return true if the request was sent, false otherwise
@@ -521,6 +548,7 @@ bool QXmppMucRoom::requestPermissions()
             return false;
         d->permissionsQueue += iq.id();
     }
+
     return true;
 }
 
@@ -655,10 +683,15 @@ void QXmppMucRoom::_q_presenceReceived(const QXmppPresence &presence)
                 d->allowedActions = newActions;
                 emit allowedActionsChanged(d->allowedActions);
             }
+
+            if (presence.mucStatusCodes().contains(201)) {
+                emit created();
+            }
         }
 
         if (added) {
             emit participantAdded(jid);
+            emit participantPermissions(jid, presence.mucItem());
             emit participantsChanged();
             if (jid == d->ownJid()) {
                 // request room information
@@ -668,14 +701,23 @@ void QXmppMucRoom::_q_presenceReceived(const QXmppPresence &presence)
                 emit joined();
             }
         } else {
+            emit participantPermissions(jid, presence.mucItem());
             emit participantChanged(jid);
         }
     }
     else if (presence.type() == QXmppPresence::Unavailable) {
         if (d->participants.contains(jid)) {
+            QXmppMucItem old(d->participants[jid].mucItem());
+
             d->participants.insert(jid, presence);
 
             emit participantRemoved(jid);
+            QXmppMucItem newMucItem(presence.mucItem());
+            if (newMucItem.jid().isEmpty()) {
+                newMucItem.setJid(old.jid());
+            }
+
+            emit participantPermissions(jid, newMucItem);
             d->participants.remove(jid);
             emit participantsChanged();
 

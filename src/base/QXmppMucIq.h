@@ -132,8 +132,13 @@ private:
 class QXMPP_EXPORT QXmppMucOwnerIq : public QXmppIq
 {
 public:
+    QXmppMucOwnerIq();
+
     QXmppDataForm form() const;
     void setForm(const QXmppDataForm &form);
+
+    void setDestroy(bool value);
+    void setDestroyReason(const QString &reason);
 
     /// \cond
     static bool isMucOwnerIq(const QDomElement &element);
@@ -147,6 +152,8 @@ protected:
 
 private:
     QXmppDataForm m_form;
+    bool m_destroy;
+    QString m_destroyReason;
 };
 
 #endif

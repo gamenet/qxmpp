@@ -143,7 +143,11 @@ public:
     QString subject() const;
     void setSubject(const QString &subject);
 
+    void setHistoryConfig(const QString &type, const QString& value);
+
 signals:
+    void created() const;
+
     /// This signal is emitted when the allowed actions change.
     void allowedActionsChanged(QXmppMucRoom::Actions actions) const;
 
@@ -178,6 +182,8 @@ signals:
     /// This signal is emitted when a participant joins the room.
     void participantAdded(const QString &jid);
 
+    void participantPermissions(const QString &jid, const QXmppMucItem& permissions);
+
     /// This signal is emitted when a participant changes.
     void participantChanged(const QString &jid);
 
@@ -201,10 +207,12 @@ public slots:
     bool leave(const QString &message = QString());
     bool requestConfiguration();
     bool requestPermissions();
+
     bool setConfiguration(const QXmppDataForm &form);
     bool setPermissions(const QList<QXmppMucItem> &permissions);
     bool sendInvitation(const QString &jid, const QString &reason);
     bool sendMessage(const QString &text);
+    bool destroy(const QString &reason);
 
 private slots:
     void _q_disconnected();

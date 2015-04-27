@@ -111,6 +111,8 @@ public:
     bool isMucSupported() const;
     void setMucSupported(bool supported);
 
+    void setMucHistory(const QString& type, const QString& value);
+
     /// XEP-0153: vCard-Based Avatars
     QByteArray photoHash() const;
     void setPhotoHash(const QByteArray&);

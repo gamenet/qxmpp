@@ -286,6 +286,12 @@ void QXmppMucAdminIq::toXmlElementFromChild(QXmlStreamWriter *writer) const
 
 /// Returns the IQ's data form.
 
+QXmppMucOwnerIq::QXmppMucOwnerIq()
+    : QXmppIq()
+    , m_destroy(false)
+{
+}
+
 QXmppDataForm QXmppMucOwnerIq::form() const
 {
     return m_form;
@@ -298,6 +304,16 @@ QXmppDataForm QXmppMucOwnerIq::form() const
 void QXmppMucOwnerIq::setForm(const QXmppDataForm &form)
 {
     m_form = form;
+}
+
+void QXmppMucOwnerIq::setDestroy(bool value)
+{
+    m_destroy = value;
+}
+
+void QXmppMucOwnerIq::setDestroyReason(const QString &reason)
+{
+    m_destroyReason = reason;
 }
 
 /// \cond
@@ -318,6 +334,15 @@ void QXmppMucOwnerIq::toXmlElementFromChild(QXmlStreamWriter *writer) const
     writer->writeStartElement("query");
     writer->writeAttribute("xmlns", ns_muc_owner);
     m_form.toXml(writer);
+
+    if (m_destroy) {
+        writer->writeStartElement("destroy");
+        if (!m_destroyReason.isEmpty())
+            writer->writeTextElement("reason", m_destroyReason);
+
+        writer->writeEndElement();
+    }
+
     writer->writeEndElement();
 }
 /// \endcond

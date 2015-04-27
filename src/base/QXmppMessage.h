@@ -102,6 +102,8 @@ public:
     QString mucInvitationReason() const;
     void setMucInvitationReason(const QString &reason);
 
+    void setMucInvitationDirect(bool value);
+
     QString receiptId() const;
     void setReceiptId(const QString &id);
 
