@@ -232,7 +232,7 @@ void QXmppRosterManager::_q_presenceReceived(const QXmppPresence& presence)
             // ask for reciprocal subscription
             subscribe(bareJid);
         } else {
-            emit subscriptionReceived(bareJid);
+            emit subscriptionReceived(bareJid, presence.statusText());
         }
         break;
     default:
