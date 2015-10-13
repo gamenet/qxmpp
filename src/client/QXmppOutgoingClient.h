@@ -82,6 +82,8 @@ signals:
     /// This signal is emitted when an IQ is received.
     void iqReceived(const QXmppIq&);
 
+    /// This signal is emitted when SSL errors are encountered.
+    void sslErrors(const QList<QSslError> &errors);
     /// This singal is emitted when the server AKC/NACK a message
     void messageAcknowledged(const QXmppMessage&, const bool);
 

@@ -31,6 +31,8 @@
 #include "QXmppLogger.h"
 #include "QXmppPresence.h"
 
+class QSslError;
+
 class QXmppClientExtension;
 class QXmppClientPrivate;
 class QXmppPresence;
@@ -91,7 +93,7 @@ public:
         NoError,            ///< No error.
         SocketError,        ///< Error due to TCP socket.
         KeepAliveError,     ///< Error due to no response to a keep alive.
-        XmppStreamError,    ///< Error due to XML stream.
+        XmppStreamError     ///< Error due to XML stream.
     };
 
     /// This enumeration describes a client state.
@@ -99,7 +101,7 @@ public:
     {
         DisconnectedState,  ///< Disconnected from the server.
         ConnectingState,    ///< Trying to connect to the server.
-        ConnectedState,     ///< Connected to the server.
+        ConnectedState      ///< Connected to the server.
     };
 
     QXmppClient(QObject *parent = 0);
@@ -136,9 +138,6 @@ public:
         return 0;
     }
 
-    void connectToServer(const QXmppConfiguration&,
-                         const QXmppPresence& initialPresence =
-                         QXmppPresence());
     bool isAuthenticated() const;
     bool isConnected() const;
 
@@ -221,6 +220,10 @@ signals:
     /// management, setting-getting vCards etc is done using iq stanzas.
     void iqReceived(const QXmppIq &iq);
 
+    /// This signal is emitted to indicate that one or more SSL errors were
+    /// encountered while establishing the identity of the server.
+    void sslErrors(const QList<QSslError> &errors);
+
     /// This signal is emitted when the client state changes.
     void stateChanged(QXmppClient::State state);
 
@@ -250,6 +253,9 @@ signals:
     void streamManagementResumed(bool resumed);
 
 public slots:
+    void connectToServer(const QXmppConfiguration&,
+                         const QXmppPresence& initialPresence =
+                         QXmppPresence());
     void connectToServer(const QString &jid,
                          const QString &password);
     void disconnectFromServer();
