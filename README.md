@@ -41,7 +41,7 @@ From [unisotech](https://github.com/unisontech/qxmpp) fork:
 BUILDING QXMPP
 ==============
 
-QXmpp requires Qt 4.5 or higher (with SSL enabled) and it uses 
+QXmpp requires Qt 4.5 or higher (including Qt 5.x) with SSL enabled and it uses
 the standard qmake build system of Qt.
 
 Build from command line:
@@ -58,6 +58,8 @@ You can pass the following arguments to qmake:
                                       other: $$[QT_INSTALL_PREFIX]
     QXMPP_AUTOTEST_INTERNAL=1     to enabled internal autotests
     QXMPP_LIBRARY_TYPE=staticlib  to build a static version of QXmpp
+    QXMPP_USE_DOXYGEN=1           to build the HTML documentation
+    QXMPP_USE_OPUS=1              to enable opus audio codec
     QXMPP_USE_SPEEX=1             to enable speex audio codec
     QXMPP_USE_THEORA=1            to enable theora video codec
     QXMPP_USE_VPX=1               to enable vpx video codec
@@ -74,7 +76,7 @@ the examples and library.
 INSTALLING QXMPP
 ================
 
-After building QXmpp, you can install the Headers, Libraries 
+After building QXmpp, you can install the Headers, Libraries
 and Documentation using the following command:
 
 Install from command line:
@@ -93,7 +95,7 @@ to your C++ flags.
 EXAMPLES
 ========
 
-Look at the example directory for various examples. Here is a description of 
+Look at the example directory for various examples. Here is a description of
 a few.
 
 * *example_0_connected*
@@ -107,7 +109,7 @@ example, send it a message from a friend of this bot and you will
 receive the message back. This example shows how to receive and send messages.
 
 * *GuiClient*
-This is a full fledged Graphical XMPP client. This example will uses most of 
+This is a full fledged Graphical XMPP client. This example will uses most of
 the part of this library.
 
 DOCUMENTATION
@@ -115,7 +117,7 @@ DOCUMENTATION
 
 You can find the API documentation for the latest QXmpp version here:
 
-http://doc.qxmpp.org/qxmpp-snapshot/
+http://doc.qxmpp.org/
 
 SUPPORTED PLATFORMS
 ===================
@@ -146,7 +148,7 @@ HOW TO REPORT A BUG
 If you think you have found a bug in QXmpp, we would like to hear about
 it so that we can fix it. Before reporting a bug, please check if the issue
 is already know at:
- 
+
 https://github.com/qxmpp-project/qxmpp/issues
 
 DISCUSSION GROUP

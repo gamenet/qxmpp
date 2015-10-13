@@ -1,7 +1,7 @@
 # Common definitions
 
 QT += network xml
-QXMPP_VERSION = 0.8.4
+QXMPP_VERSION = 0.9.2
 QXMPP_INCLUDEPATH = $$PWD/src/base $$PWD/src/client $$PWD/src/server
 
 # Determine library name
@@ -13,7 +13,7 @@ CONFIG(debug, debug|release) {
 
 # Determine library type (shared or staticlib)
 isEmpty(QXMPP_LIBRARY_TYPE) {
-    android {
+    android | ios {
         QXMPP_LIBRARY_TYPE = staticlib
     } else {
         QXMPP_LIBRARY_TYPE = shared
@@ -31,6 +31,11 @@ android {
     QXMPP_INTERNAL_LIBS = -lesock
 } else:win32 {
     QXMPP_INTERNAL_LIBS = -ldnsapi -lws2_32
+}
+
+!isEmpty(QXMPP_USE_OPUS) {
+    DEFINES += QXMPP_USE_OPUS
+    QXMPP_INTERNAL_LIBS += -lopus
 }
 
 !isEmpty(QXMPP_USE_SPEEX) {
