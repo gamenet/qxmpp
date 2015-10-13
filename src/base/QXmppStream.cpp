@@ -49,7 +49,7 @@ public:
     QByteArray dataBuffer;
     QSslSocket* socket;
 
-    // stream state
+    // incoming stream state
     QByteArray streamStart;
 };
 
@@ -86,11 +86,13 @@ QXmppStream::~QXmppStream()
 
 void QXmppStream::disconnectFromHost(const bool sendCloseStream)
 {
-    if(sendCloseStream)
-        sendData(streamRootElementEnd);
-    if (d->socket)
-    {
-        d->socket->flush();
+    if (d->socket) {
+        if (d->socket->state() == QAbstractSocket::ConnectedState) {
+            sendData(streamRootElementEnd);
+            d->socket->flush();
+        }
+        // FIXME: according to RFC 6120 section 4.4, we should wait for
+        // the incoming stream to end before closing the socket
         d->socket->disconnectFromHost();
     }
 }
@@ -219,6 +221,9 @@ void QXmppStream::_q_socketReadyRead()
     endStreamRegex.setMinimal(true);
 
     // check whether we need to add stream start / end elements
+    //
+    // NOTE: as we may only have partial XML content, do not alter the stream's
+    // state until we have a valid XML document!
     QByteArray completeXml = d->dataBuffer;
     const QString strData = QString::fromUtf8(d->dataBuffer);
     bool streamStart = false;
@@ -226,7 +231,10 @@ void QXmppStream::_q_socketReadyRead()
         streamStart = true;
     else
         completeXml.prepend(d->streamStart);
-    if (!strData.contains(endStreamRegex))
+    bool streamEnd = false;
+    if (strData.contains(endStreamRegex))
+        streamEnd = true;
+    else
         completeXml.append(streamRootElementEnd);
 
     // check whether we have a valid XML document
@@ -237,12 +245,12 @@ void QXmppStream::_q_socketReadyRead()
     // remove data from buffer
     logReceived(strData);
     d->dataBuffer.clear();
-    if (streamStart)
-        d->streamStart = startStreamRegex.cap(0).toUtf8();
 
     // process stream start
-    if (streamStart)
+    if (streamStart) {
+        d->streamStart = startStreamRegex.cap(0).toUtf8();
         handleStream(doc.documentElement());
+    }
 
     // process stanzas
     QDomElement nodeRecv = doc.documentElement().firstChildElement();
@@ -250,6 +258,10 @@ void QXmppStream::_q_socketReadyRead()
         handleStanza(nodeRecv);
         nodeRecv = nodeRecv.nextSiblingElement();
     }
+
+    // process stream end
+    if (streamEnd)
+        disconnectFromHost();
 }
 
 

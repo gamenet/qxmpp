@@ -2,9 +2,11 @@ TEMPLATE = subdirs
 SUBDIRS = \
     qxmpparchiveiq \
     qxmppbindiq \
+    qxmppcallmanager \
     qxmppdataform \
     qxmppdiscoveryiq \
     qxmppentitytimeiq \
+    qxmppiceconnection \
     qxmppiq \
     qxmppjingleiq \
     qxmppmessage \
@@ -15,13 +17,16 @@ SUBDIRS = \
     qxmppresultset \
     qxmpprosteriq \
     qxmpprpciq \
+    qxmpprtcppacket \
     qxmpprtppacket \
     qxmppserver \
     qxmppsessioniq \
     qxmppsimplearchiveiq \
+    qxmppsocks \
     qxmppstanza \
     qxmppstreamfeatures \
     qxmppstunmessage \
+    qxmpptransfermanager \
     qxmpputils \
     qxmppvcardiq \
     qxmppversioniq \
