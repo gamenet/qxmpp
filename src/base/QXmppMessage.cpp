@@ -26,6 +26,7 @@
 #include <QTextStream>
 #include <QXmlStreamWriter>
 #include <QPair>
+#include <QSharedPointer>
 
 #include "QXmppConstants.h"
 #include "QXmppMessage.h"
