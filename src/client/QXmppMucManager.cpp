@@ -706,6 +706,11 @@ void QXmppMucRoom::_q_presenceReceived(const QXmppPresence &presence)
         }
     }
     else if (presence.type() == QXmppPresence::Unavailable) {
+        // INFO http://xmpp.org/registrar/mucstatus.html
+        // Ignore system shutdown presence.
+        if (presence.mucStatusCodes().contains(332))
+            return;
+
         if (d->participants.contains(jid)) {
             QXmppMucItem old(d->participants[jid].mucItem());
 
@@ -755,6 +760,7 @@ void QXmppMucRoom::_q_presenceReceived(const QXmppPresence &presence)
             }
         }
     }
+
     else if (presence.type() == QXmppPresence::Error) {
         if (presence.isMucSupported()) {
             // emit error
