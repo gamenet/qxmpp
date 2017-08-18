@@ -105,6 +105,10 @@ const char* ns_jingle_rtp_audio = "urn:xmpp:jingle:apps:rtp:audio";
 const char* ns_jingle_rtp_video = "urn:xmpp:jingle:apps:rtp:video";
 // XEP-0184: Message Receipts
 const char* ns_message_receipts = "urn:xmpp:receipts";
+
+// XEP-0191: Blocking Command
+const char* ns_blocking = "urn:xmpp:blocking";
+
 // XEP-0196: User Gaming
 const char* ns_user_gaming = "urn:xmpp:gaming:0";
 const char* ns_user_gaming_notify = "urn:xmpp:gaming:0+notify";

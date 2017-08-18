@@ -46,6 +46,7 @@ class QXmppRosterManager;
 class QXmppVCardManager;
 class QXmppVersionManager;
 class QXmppPEPManager;
+class QXmppUserBlacklistManager;
 
 /// \defgroup Core
 
@@ -157,6 +158,8 @@ public:
     QXmppVCardManager& vCardManager();
     QXmppVersionManager& versionManager();
     QXmppPEPManager& pepManager();
+
+    QXmppUserBlacklistManager& blacklistManager();
 
     void sendRequestStreamManagement();
 
