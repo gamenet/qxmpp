@@ -1,1 +1,7 @@
 /qxmpp.pro.user
+.vs/*
+src/Debug/moc_*
+src/Release/moc_*
+*.obj
+*.pdb
+*.tlog

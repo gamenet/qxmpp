@@ -106,6 +106,10 @@ extern const char* ns_jingle_rtp_audio;
 extern const char* ns_jingle_rtp_video;
 // XEP-0184: Message Receipts
 extern const char* ns_message_receipts;
+
+// XEP-0191: Blocking Command
+extern const char* ns_blocking;
+
 // XEP-0196: User Gaming
 extern const char* ns_user_gaming;
 extern const char* ns_user_gaming_notify;
