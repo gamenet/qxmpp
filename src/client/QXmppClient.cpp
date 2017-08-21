@@ -40,6 +40,8 @@
 #include "QXmppDiscoveryIq.h"
 #include "QXmppPEPManager.h"
 
+#include "QxmppUserBlacklistManager.h"
+
 class QXmppClientPrivate
 {
 public:
@@ -187,6 +189,8 @@ QXmppClient::QXmppClient(QObject *parent)
     addExtension(new QXmppEntityTimeManager());
     addExtension(new QXmppDiscoveryManager());
     addExtension(new QXmppPEPManager(true, true));
+
+    addExtension(new QXmppUserBlacklistManager());
 }
 
 /// Destructor, destroys the QXmppClient object.
@@ -486,6 +490,11 @@ QXmppVersionManager& QXmppClient::versionManager()
 QXmppPEPManager &QXmppClient::pepManager()
 {
     return *findExtension<QXmppPEPManager>();
+}
+
+QXmppUserBlacklistManager& QXmppClient::blacklistManager()
+{
+  return *findExtension<QXmppUserBlacklistManager>();
 }
 
 /// Sends a stream management request XEP-0198: Stream Management

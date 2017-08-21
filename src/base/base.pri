@@ -42,7 +42,8 @@ INSTALL_HEADERS += \
     base/QXmppMessageCarbonsIq.h \
     base/QXmppReachAddress.h \
     base/QXmppSimpleArchivePreferenceIq.h \
-    base/QXmppStreamManagement.h
+    base/QXmppStreamManagement.h \
+    base/QXmppUserBlacklistIq.h
 
 HEADERS += \
     base/QXmppCodec_p.h \
@@ -97,7 +98,8 @@ SOURCES += \
     base/QXmppMessageCarbonsIq.cpp \
     base/QXmppReachAddress.cpp \
     base/QXmppStreamManagement.cpp \
-    base/QXmppGaming.cpp
+    base/QXmppGaming.cpp \
+    base/QXmppUserBlacklistIq.cpp
 
 # DNS
 qt_version = $$QT_MAJOR_VERSION

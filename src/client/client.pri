@@ -20,7 +20,8 @@ INSTALL_HEADERS += \
     client/QXmppTransferManager_p.h \
     client/QXmppVCardManager.h \
     client/QXmppVersionManager.h \
-    client/QXmppLastActivityManager.h
+    client/QXmppLastActivityManager.h \
+    client/QxmppUserBlacklistManager.h
 
 # Source files
 SOURCES += \
@@ -44,7 +45,8 @@ SOURCES += \
     client/QXmppVCardManager.cpp \
     client/QXmppVersionManager.cpp \
     client/QXmppPEPManager.cpp \
-    client/QXmppLastActivityManager.cpp
+    client/QXmppLastActivityManager.cpp \
+    client/QXmppUserBlacklistManager.cpp
 
 HEADERS += \
     client/QXmppPEPManager.h
