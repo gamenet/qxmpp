@@ -163,6 +163,7 @@ public:
     bool isReplace() const;
     void setReplace(const QString& replaceId);
     QString replaceId() const;
+    QString generateId();
 
     /// \cond
     void parse(const QDomElement &element);

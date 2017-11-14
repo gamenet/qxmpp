@@ -27,6 +27,7 @@
 #include <QXmlStreamWriter>
 #include <QPair>
 #include <QSharedPointer>
+#include <QUuid>
 
 #include "QXmppConstants.h"
 #include "QXmppMessage.h"
@@ -545,6 +546,12 @@ void QXmppMessage::setReplace(const QString& replaceId)
 {
     d->replace   = true;
     d->replaceId = replaceId;
+}
+
+QString QXmppMessage::generateId()
+{
+    QString prng = "qxmpp" + QUuid::createUuid().toString();
+    return prng;
 }
 
 /// \cond
