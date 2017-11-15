@@ -548,10 +548,9 @@ void QXmppMessage::setReplace(const QString& replaceId)
     d->replaceId = replaceId;
 }
 
-QString QXmppMessage::generateId()
+void QXmppMessage::generateId()
 {
-    QString prng = "qxmpp" + QUuid::createUuid().toString();
-    return prng;
+    generateAndSetNextId();
 }
 
 /// \cond
