@@ -116,7 +116,8 @@ QXmppDiscoveryIq QXmppDiscoveryManager::capabilities()
         << ns_capabilities      // XEP-0115: Entity Capabilities
         << ns_ping              // XEP-0199: XMPP Ping
         << ns_attention         // XEP-0224: Attention
-        << ns_chat_markers;     // XEP-0333: Chat Markers
+        << ns_chat_markers      // XEP-0333: Chat Markers
+        << ns_replace_message;  // XEP-0308: Replace message
 
     foreach(QXmppClientExtension* extension, client()->extensions())
     {

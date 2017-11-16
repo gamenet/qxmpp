@@ -547,6 +547,11 @@ void QXmppMessage::setReplace(const QString& replaceId)
     d->replaceId = replaceId;
 }
 
+void QXmppMessage::generateId()
+{
+    generateAndSetNextId();
+}
+
 /// \cond
 void QXmppMessage::parse(const QDomElement &element)
 {
